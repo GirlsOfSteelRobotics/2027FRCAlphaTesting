@@ -2,10 +2,8 @@ package com.gos.reefscape.subsystems;
 
 import static com.gos.lib.pathing.PathPlannerUtils.followChoreoPath;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Microseconds;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +54,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTablesJNI;
-import edu.wpi.first.util.WPIUtilJNI;
 import frc.robot.generated.TunerConstantsCompetition;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -467,9 +463,7 @@ public class ChassisSubsystem extends TunerSwerveDrivetrain implements Subsystem
 
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> stds) {
-        // TODO weird
-        double myTimestamp = Microseconds.of(NetworkTablesJNI.now()).in(Seconds);
-        super.addVisionMeasurement(visionRobotPoseMeters, myTimestamp, stds);
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), stds);
         m_oldPoseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, stds);
     }
 
