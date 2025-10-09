@@ -2,7 +2,6 @@ package com.gos.reefscape.led_patterns;
 
 import com.gos.lib.led.mirrored.MirroredLEDAlertPattern;
 import com.gos.lib.led.mirrored.MirroredLEDBoolean;
-import com.gos.reefscape.Constants;
 import com.gos.lib.properties.GosBooleanProperty;
 import com.gos.reefscape.commands.Autos;
 import com.gos.reefscape.led_patterns.sub_patterns.AutoModePattern;
@@ -13,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class DisabledPatterns {
-    private static final GosBooleanProperty ALWAYS_SHOW_LIGHTS = new GosBooleanProperty(Constants.DEFAULT_CONSTANT_PROPERTIES, "Led: Always Run Disabled Pattern", false);
+    private static final GosBooleanProperty ALWAYS_SHOW_LIGHTS = new GosBooleanProperty(false, "Led: Always Run Disabled Pattern", false);
     private final ElevatorSubsystem m_elevator;
     private final MirroredLEDBoolean m_elevatorGood;
     private final MirroredLEDAlertPattern m_alert;

@@ -20,10 +20,10 @@ public enum RevMotorControllerModel {
         };
     }
 
-    public SparkBase createMotor(int canId, MotorType motorTYpe) {
+    public SparkBase createMotor(int busId, int canId, MotorType motorTYpe) {
         return switch (this) {
-        case SPARK_MAX -> new SparkMax(canId, motorTYpe);
-        case SPARK_FLEX -> new SparkFlex(canId, motorTYpe);
+        case SPARK_MAX -> new SparkMax(busId, canId, motorTYpe);
+        case SPARK_FLEX -> new SparkFlex(busId, canId, motorTYpe);
         default -> throw new IllegalStateException("Unexpected value: " + this);
         };
     }

@@ -19,6 +19,8 @@ public final class Constants {
     public static final boolean IS_COMPETITION_ROBOT = false;
 
     // CAN
+    public static final int SUPERSTRUCTURE_BUS_ID = 0;
+
     public static final int FRONT_LEFT_DRIVE_MOTOR_ID = 1;
     public static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 4;
     public static final int BACK_LEFT_DRIVE_MOTOR_ID = 5;
@@ -42,17 +44,15 @@ public final class Constants {
 
     public static final int PIGEON_ID = 20;
 
-    // DIO
-    public static final int CORAL_SENSOR_ID = 9;
+    // SmartIO
+    public static final int CORAL_SENSOR_ID = 0;
+    public static final int PIVOT_ABSOLUTE_ENCODER = 1;
     public static final int ALGAE_SENSOR_ID = 4;
     public static final int BOTLIMITSWICTH_ID = 2;
     public static final int TOPLIMITSWITCH_ID = 3;
-    public static final int PIVOT_ABSOLUTE_ENCODER = 8;
+    public static final int LED_PORT_ID = 5;
 
     // Joysticks
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
-
-    // PWM
-    public static final int LED_PORT_ID = 0;
 }

@@ -76,6 +76,7 @@ public class RevSwerveModule implements AutoCloseable {
     @SuppressWarnings({"PMD.ExcessiveMethodLength", "PMD.NcssCount"})
     public RevSwerveModule(String moduleName,
                            RevSwerveModuleConstants moduleConstants,
+                           int busId,
                            int drivingCANId,
                            int azimuthId,
                            double chassisAngularOffset,
@@ -84,8 +85,8 @@ public class RevSwerveModule implements AutoCloseable {
                            boolean lockPidConstants) {
         m_moduleName = moduleName;
 
-        m_drivingSparkMax = moduleConstants.m_motorControllerModel.createMotor(drivingCANId, MotorType.kBrushless);
-        m_turningSparkMax = new SparkMax(azimuthId, MotorType.kBrushless);
+        m_drivingSparkMax = moduleConstants.m_motorControllerModel.createMotor(busId, drivingCANId, MotorType.kBrushless);
+        m_turningSparkMax = new SparkMax(busId, azimuthId, MotorType.kBrushless);
 
         SparkBaseConfig drivingMotorConfig = moduleConstants.m_motorControllerModel.createConfig().apply(moduleConstants.m_drivingConfig);
         SparkBaseConfig turningMotorConfig = moduleConstants.m_motorControllerModel.createConfig().apply(moduleConstants.m_turningConfig);
@@ -155,8 +156,8 @@ public class RevSwerveModule implements AutoCloseable {
         m_logger = new LoggingUtil(loggingTable);
         m_logger.addDouble("Goal Angle", m_desiredState.angle::getDegrees);
         m_logger.addDouble("Current Angle",  m_currentState.angle::getDegrees);
-        m_logger.addDouble("Goal Velocity", () -> m_desiredState.speedMetersPerSecond);
-        m_logger.addDouble("Current Velocity", () -> m_currentState.speedMetersPerSecond);
+        m_logger.addDouble("Goal Velocity", () -> m_desiredState.speed);
+        m_logger.addDouble("Current Velocity", () -> m_currentState.speed);
         m_logger.addDouble("Drive Percent Output", m_drivingSparkMax::getAppliedOutput);
 
         m_logger.addDouble("Abs Encoder", m_turningAbsoluteEncoder::getPosition);
@@ -200,7 +201,7 @@ public class RevSwerveModule implements AutoCloseable {
     }
 
     public SwerveModuleState getDesiredState() {
-        return new SwerveModuleState(m_desiredState.speedMetersPerSecond, m_desiredState.angle.minus(new Rotation2d(m_chassisAngularOffset)));
+        return new SwerveModuleState(m_desiredState.speed, m_desiredState.angle.minus(new Rotation2d(m_chassisAngularOffset)));
     }
 
     /**
@@ -229,14 +230,14 @@ public class RevSwerveModule implements AutoCloseable {
     public void setDesiredState(SwerveModuleState desiredState) {
         // Apply chassis angular offset to the desired state.
         m_desiredState = new SwerveModuleState();
-        m_desiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
+        m_desiredState.speed = desiredState.speed;
         m_desiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(m_chassisAngularOffset));
 
         // Optimize the reference state to avoid spinning further than 90 degrees.
         m_desiredState.optimize(new Rotation2d(getTurningEncoderAngle()));
 
         // Command driving and turning SPARKS MAX towards their respective setpoints.
-        m_drivingPIDController.setReference(m_desiredState.speedMetersPerSecond, ControlType.kVelocity);
+        m_drivingPIDController.setReference(m_desiredState.speed, ControlType.kVelocity);
         m_turningPIDController.setReference(m_desiredState.angle.getRadians(), ControlType.kPosition);
 
     }

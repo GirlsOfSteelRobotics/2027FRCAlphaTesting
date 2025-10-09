@@ -44,44 +44,6 @@ public class ElevatorFeedForwardProperty extends BaseFeedForwardProperty {
     }
 
     /**
-     * Calculates the feedforward from the gains and setpoints assuming continuous control.
-     *
-     * @param velocity The velocity setpoint.
-     * @param acceleration The acceleration setpoint.
-     * @return The computed feedforward.
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true, since = "2025")
-    public double calculate(double velocity, double acceleration) {
-        return m_feedForward.calculate(velocity, acceleration);
-    }
-
-    /**
-     * Calculates the feedforward from the gains and velocity setpoint assuming continuous control
-     * (acceleration is assumed to be zero).
-     *
-     * @param velocity The velocity setpoint.
-     * @return The computed feedforward.
-     */
-    @Deprecated(forRemoval = true, since = "2025")
-    public double calculate(double velocity) {
-        return m_feedForward.calculate(velocity);
-    }
-
-    /**
-     * Calculates the feedforward from the gains and setpoints assuming discrete control.
-     *
-     * <p>Note this method is inaccurate when the velocity crosses 0.
-     *
-     * @param currentVelocity The current velocity setpoint in meters per second.
-     * @param nextVelocity The next velocity setpoint in meters per second.
-     * @return The computed feedforward in volts.
-     */
-    public double calculateWithVelocities(double currentVelocity, double nextVelocity) {
-        return m_feedForward.calculateWithVelocities(currentVelocity, nextVelocity);
-    }
-
-    /**
      * Returns the static gain in volts.
      *
      * @return The static gain in volts.
@@ -115,5 +77,29 @@ public class ElevatorFeedForwardProperty extends BaseFeedForwardProperty {
      */
     public double getKa() {
         return m_feedForward.getKa();
+    }
+
+    /**
+     * Calculates the feedforward from the gains and velocity setpoint assuming continuous control
+     * (acceleration is assumed to be zero).
+     *
+     * @param velocity The velocity setpoint in meters per second.
+     * @return The computed feedforward.
+     */
+    public double calculate(double velocity) {
+        return m_feedForward.calculate(velocity);
+    }
+
+    /**
+     * Calculates the feedforward from the gains and setpoints assuming discrete control.
+     *
+     * <p>Note this method is inaccurate when the velocity crosses 0.
+     *
+     * @param currentVelocity The current velocity setpoint in meters per second.
+     * @param nextVelocity The next velocity setpoint in meters per second.
+     * @return The computed feedforward.
+     */
+    public double calculate(double currentVelocity, double nextVelocity) {
+        return m_feedForward.calculate(currentVelocity, nextVelocity);
     }
 }

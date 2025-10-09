@@ -60,7 +60,7 @@ public class RevProfiledElevatorController {
         m_profilePid.calculate(currentHeight, goalHeightMeters);
 
         TrapezoidProfile.State setpoint = m_profilePid.getSetpoint();
-        double feedForwardVolts = m_wpiFeedForward.calculateWithVelocities(
+        double feedForwardVolts = m_wpiFeedForward.calculate(
             currentVelocityMps,
             setpoint.velocity);
 

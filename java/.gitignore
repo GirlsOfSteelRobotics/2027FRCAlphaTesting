@@ -568,13 +568,13 @@ user.bazelrc
 !/WPILib-License.md
 !/settings.gradle
 .vscode
+.wpilib
 gradle/*.jar
 gradle/*.properties
-*/*/.wpilib
-*/*/gradlew
-*/*/gradlew.bat
-*/*/settings.gradle
-*/*/WPILib-License.md
+gradlew
+gradlew.bat
+WPILib-License.md
+settings.gradle
 
 ctre_sim/
 

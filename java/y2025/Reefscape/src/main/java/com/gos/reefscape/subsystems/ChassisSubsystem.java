@@ -381,7 +381,7 @@ public class ChassisSubsystem extends TunerSwerveDrivetrain implements Subsystem
 
         if (DEBUG_ODOMETRY) {
             m_odometryOnly.update(getPigeon2().getRotation2d(), state.ModulePositions);
-            m_field.setOdometry(m_odometryOnly.getPoseMeters());
+            m_field.setOdometry(m_odometryOnly.getPose());
         }
         if (DEBUG_POSE_ESTIMATION) {
             m_oldPoseEstimator.update(getPigeon2().getRotation2d(), state.ModulePositions);
@@ -459,11 +459,6 @@ public class ChassisSubsystem extends TunerSwerveDrivetrain implements Subsystem
                 .withRotationalRate(rotationalJoystick * MAX_ROTATION_SPEED)
 
         );
-    }
-
-    @Override
-    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
     @Override

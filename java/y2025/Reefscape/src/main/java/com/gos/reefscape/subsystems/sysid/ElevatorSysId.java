@@ -60,19 +60,19 @@ public class ElevatorSysId {
     public Command createSysidRoutineCommand() {
         return Commands.sequence(
             Commands.print("Waiting to start DynamicForward"),
-            Commands.waitSeconds(2),
+            Commands.waitTime(Seconds.of(2)),
             sysIdDynamic(SysIdRoutine.Direction.kForward).until(() -> m_elevator.getHeight() > 60),
 
             Commands.print("Waiting to start DynamicReverse"),
-            Commands.waitSeconds(2),
+            Commands.waitTime(Seconds.of(2)),
             sysIdDynamic(SysIdRoutine.Direction.kReverse).until(() -> m_elevator.getHeight() < 5),
 
             Commands.print("Waiting to start QuasistaticForward"),
-            Commands.waitSeconds(2),
+            Commands.waitTime(Seconds.of(2)),
             sysIdQuasistatic(SysIdRoutine.Direction.kForward).until(() -> m_elevator.getHeight() > 60),
 
             Commands.print("Waiting to start QuasistaticReverse"),
-            Commands.waitSeconds(2),
+            Commands.waitTime(Seconds.of(2)),
             sysIdQuasistatic(SysIdRoutine.Direction.kReverse).until(() -> m_elevator.getHeight() < 5)
 
         ).withName("Elevator SysID Routine");

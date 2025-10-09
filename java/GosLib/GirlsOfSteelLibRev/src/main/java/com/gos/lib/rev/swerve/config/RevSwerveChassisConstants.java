@@ -14,6 +14,8 @@ public class RevSwerveChassisConstants {
     public static final double BACK_RIGHT_CHASSIS_ANGULAR_OFFSET = Math.PI / 2;
 
     // SPARK MAX CAN IDs
+    public int m_busId;
+
     public final int m_frontLeftDrivingCanId;
     public final int m_rearLeftDrivingCanId;
     public final int m_frontRightDrivingCanId;

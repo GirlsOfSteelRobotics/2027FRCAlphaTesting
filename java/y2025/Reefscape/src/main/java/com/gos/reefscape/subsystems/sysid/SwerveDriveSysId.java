@@ -7,8 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
-import static edu.wpi.first.units.Units.Second;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
 public class SwerveDriveSysId {
     public final ChassisSubsystem m_chassis;
@@ -79,19 +78,19 @@ public class SwerveDriveSysId {
 
 
             Commands.print("Waiting to start DynamicForward"),
-            Commands.waitSeconds(2),
+            Commands.waitTime(Seconds.of(2)),
             sysIdDynamic(SysIdRoutine.Direction.kForward, routine).withTimeout(5),
 
             Commands.print("Waiting to start DynamicReverse"),
-            Commands.waitSeconds(2),
+            Commands.waitTime(Seconds.of(2)),
             sysIdDynamic(SysIdRoutine.Direction.kReverse, routine).withTimeout(5),
 
             Commands.print("Waiting to start QuasistaticForward"),
-            Commands.waitSeconds(2),
+            Commands.waitTime(Seconds.of(2)),
             sysIdQuasistatic(SysIdRoutine.Direction.kForward, routine).withTimeout(5),
 
             Commands.print("Waiting to start QuasistaticReverse"),
-            Commands.waitSeconds(2),
+            Commands.waitTime(Seconds.of(2)),
             sysIdQuasistatic(SysIdRoutine.Direction.kReverse, routine).withTimeout(5),
 
             Commands.runOnce(SignalLogger::stop)
