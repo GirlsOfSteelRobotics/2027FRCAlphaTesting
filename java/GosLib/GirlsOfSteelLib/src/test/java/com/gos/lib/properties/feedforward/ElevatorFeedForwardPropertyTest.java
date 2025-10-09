@@ -43,35 +43,4 @@ public class ElevatorFeedForwardPropertyTest extends BasePropertiesTest {
         assertEquals(1, property.getKg());
         assertEquals(4 + 1, Preferences.getKeys().size());
     }
-
-    @Test
-    @SuppressWarnings("removal")
-    public void testDeprecatedCalculateNoKa() {
-        ElevatorFeedForwardProperty property = new ElevatorFeedForwardProperty(PROPERTY_NAME, true)
-            .addKff(1)
-            .addKs(2)
-            .addKg(4);
-
-        assertEquals(property.getKs() + property.getKg() + property.getKFf() * 2, property.calculate(2));
-        assertEquals(-property.getKs() + property.getKg() + property.getKFf() * -2, property.calculate(-2));
-
-        assertEquals(property.getKs() + property.getKg() + property.getKFf() * 2, property.calculate(2, 1.3));
-        assertEquals(-property.getKs() + property.getKg() + property.getKFf() * -2, property.calculate(-2, 1.3));
-    }
-
-    @Test
-    @SuppressWarnings("removal")
-    public void testDeprecatedCalculateWithKa() {
-        ElevatorFeedForwardProperty property = new ElevatorFeedForwardProperty(PROPERTY_NAME, true)
-            .addKff(1)
-            .addKs(2)
-            .addKg(4)
-            .addKa(1.2);
-
-        assertEquals(property.getKs() + property.getKg() + property.getKFf() * 2, property.calculate(2));
-        assertEquals(-property.getKs() + property.getKg() + property.getKFf() * -2, property.calculate(-2));
-
-        assertEquals(property.getKs() + property.getKg() + property.getKFf() * 2 + 1.3 * property.getKa(), property.calculate(2, 1.3));
-        assertEquals(-property.getKs() + property.getKg() + property.getKFf() * -2 + 1.3 * property.getKa(), property.calculate(-2, 1.3));
-    }
 }

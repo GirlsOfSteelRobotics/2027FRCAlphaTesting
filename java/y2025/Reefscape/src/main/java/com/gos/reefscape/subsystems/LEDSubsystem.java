@@ -32,7 +32,6 @@ public class LEDSubsystem extends SubsystemBase {
         m_led = new AddressableLED(Constants.LED_PORT_ID);
         m_led.setLength(m_buffer.getLength());
         m_led.setData((m_buffer));
-        m_led.start();
 
         m_enabledPatterns = new EnabledPatterns(m_buffer, coral, chassis);
         m_disabledPatterns = new DisabledPatterns(m_buffer, autoModeFactory, elevator);

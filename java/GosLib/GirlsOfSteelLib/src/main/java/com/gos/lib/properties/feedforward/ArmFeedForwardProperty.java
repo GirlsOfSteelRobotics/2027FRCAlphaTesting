@@ -63,7 +63,7 @@ public class ArmFeedForwardProperty extends BaseFeedForwardProperty {
      */
     public double calculateWithVelocities(
         double currentAngle, double currentVelocity, double nextVelocity) {
-        return m_feedForward.calculateWithVelocities(currentAngle, currentVelocity, nextVelocity);
+        return m_feedForward.calculate(currentAngle, currentVelocity, nextVelocity);
     }
 
     /**

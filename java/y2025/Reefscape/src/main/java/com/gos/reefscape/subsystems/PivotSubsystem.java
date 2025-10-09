@@ -14,20 +14,14 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.snobotv2.module_wrappers.rev.RevEncoderSimWrapper;
-import org.snobotv2.module_wrappers.rev.RevMotorControllerSimWrapper;
-import org.snobotv2.sim_wrappers.SingleJointedArmSimWrapper;
 
 
 public class PivotSubsystem extends SubsystemBase {
@@ -42,7 +36,7 @@ public class PivotSubsystem extends SubsystemBase {
     private final DutyCycleEncoder m_absoluteEncoder;
     private final LoggingUtil m_networkTableEntries;
     private final SparkMaxAlerts m_checkAlerts;
-    private SingleJointedArmSimWrapper m_pivotSimulator;
+    // private SingleJointedArmSimWrapper m_pivotSimulator;
 
     public static final GosDoubleProperty PIVOT_TUNABLE_ANGLE = new GosDoubleProperty(Constants.DEFAULT_CONSTANT_PROPERTIES, "tunablePivot", -220);
 
@@ -52,9 +46,10 @@ public class PivotSubsystem extends SubsystemBase {
     private double m_armGoalAngle = NO_GOAL_ANGLE;
 
     public PivotSubsystem() {
-        m_pivotMotor = new SparkFlex(Constants.PIVOT_MOTOR_ID, MotorType.kBrushless);
+        m_pivotMotor = new SparkFlex(Constants.SUPERSTRUCTURE_BUS_ID, Constants.PIVOT_MOTOR_ID, MotorType.kBrushless);
         m_relativeEncoder = m_pivotMotor.getEncoder();
         m_absoluteEncoder = new DutyCycleEncoder(Constants. PIVOT_ABSOLUTE_ENCODER, 360, 248 - 14 - 6);
+        m_absoluteEncoder.setAssumedFrequency(968);
 
 
         SparkMaxConfig pivotConfig = new SparkMaxConfig();
@@ -94,13 +89,13 @@ public class PivotSubsystem extends SubsystemBase {
 
 
         m_pivotMotor.configure(pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        if (RobotBase.isSimulation()) {
-            DCMotor gearbox = DCMotor.getNeoVortex(1);
-            SingleJointedArmSim armSim = new SingleJointedArmSim(gearbox, GEAR_RATIO, .01,
-                0.381, Units.degreesToRadians(-220), Units.degreesToRadians(90), true, 0);
-            m_pivotSimulator = new SingleJointedArmSimWrapper(armSim, new RevMotorControllerSimWrapper(m_pivotMotor, gearbox),
-                RevEncoderSimWrapper.create(m_pivotMotor), true);
-        }
+        // if (RobotBase.isSimulation()) {
+        //     DCMotor gearbox = DCMotor.getNeoVortex(1);
+        //     SingleJointedArmSim armSim = new SingleJointedArmSim(gearbox, GEAR_RATIO, .01,
+        //         0.381, Units.degreesToRadians(-220), Units.degreesToRadians(90), true, 0);
+        //     m_pivotSimulator = new SingleJointedArmSimWrapper(armSim, new RevMotorControllerSimWrapper(m_pivotMotor, gearbox),
+        //         RevEncoderSimWrapper.create(m_pivotMotor), true);
+        // }
 
         syncRelativeEncoder();
         m_relativeEncoder.setPosition(DEFAULT_ANGLE);
@@ -132,7 +127,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        m_pivotSimulator.update();
+        // m_pivotSimulator.update();
     }
 
 

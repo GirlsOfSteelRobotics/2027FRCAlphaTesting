@@ -17,12 +17,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.RobotBase;
-import org.snobotv2.module_wrappers.BaseGyroWrapper;
-import org.snobotv2.sim_wrappers.SwerveModuleSimWrapper;
-import org.snobotv2.sim_wrappers.SwerveSimWrapper;
+//import org.snobotv2.module_wrappers.BaseGyroWrapper;
+//import org.snobotv2.sim_wrappers.SwerveModuleSimWrapper;
+//import org.snobotv2.sim_wrappers.SwerveSimWrapper;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class RevSwerveChassis implements AutoCloseable {
@@ -50,15 +48,16 @@ public class RevSwerveChassis implements AutoCloseable {
     private final SwerveDrivePublisher m_swervePublisher;
 
     // Simulation
-    private SwerveSimWrapper m_simulator;
+    // private SwerveSimWrapper m_simulator;
 
     /** Creates a new DriveSubsystem. */
-    public RevSwerveChassis(RevSwerveChassisConstants chassisConstants, Supplier<Rotation2d> gyroAngleSupplier, BaseGyroWrapper gyroSimulator) {
+    public RevSwerveChassis(RevSwerveChassisConstants chassisConstants, Supplier<Rotation2d> gyroAngleSupplier) {
         RevSwerveModuleConstants moduleConstants = chassisConstants.getModuleConstants();
 
         m_frontLeft = new RevSwerveModule(
             "FL",
             moduleConstants,
+            chassisConstants.m_busId,
             chassisConstants.m_frontLeftDrivingCanId,
             chassisConstants.m_frontLeftTurningCanId,
             RevSwerveChassisConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
@@ -68,6 +67,7 @@ public class RevSwerveChassis implements AutoCloseable {
         m_frontRight = new RevSwerveModule(
             "FR",
             moduleConstants,
+            chassisConstants.m_busId,
             chassisConstants.m_frontRightDrivingCanId,
             chassisConstants.m_frontRightTurningCanId,
             RevSwerveChassisConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
@@ -77,6 +77,7 @@ public class RevSwerveChassis implements AutoCloseable {
         m_backLeft = new RevSwerveModule(
             "BL",
             moduleConstants,
+            chassisConstants.m_busId,
             chassisConstants.m_rearLeftDrivingCanId,
             chassisConstants.m_rearLeftTurningCanId,
             RevSwerveChassisConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
@@ -86,6 +87,7 @@ public class RevSwerveChassis implements AutoCloseable {
         m_backRight = new RevSwerveModule(
             "BR",
             moduleConstants,
+            chassisConstants.m_busId,
             chassisConstants.m_rearRightDrivingCanId,
             chassisConstants.m_rearRightTurningCanId,
             RevSwerveChassisConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
@@ -114,14 +116,14 @@ public class RevSwerveChassis implements AutoCloseable {
         m_maxSpeedMetersPerSecond = chassisConstants.m_maxSpeedMetersPerSecond;
         m_maxAngularSpeed = chassisConstants.m_maxAngularSpeed;
 
-        if (RobotBase.isSimulation()) {
-            List<SwerveModuleSimWrapper> moduleSims = List.of(
-                m_frontLeft.getSimWrapper(),
-                m_frontRight.getSimWrapper(),
-                m_backLeft.getSimWrapper(),
-                m_backRight.getSimWrapper());
-            m_simulator = new SwerveSimWrapper(chassisConstants.m_wheelBase, chassisConstants.m_trackWidth, 64.0, 1.0, moduleSims, gyroSimulator);
-        }
+        // if (RobotBase.isSimulation()) {
+        //     List<SwerveModuleSimWrapper> moduleSims = List.of(
+        //         m_frontLeft.getSimWrapper(),
+        //         m_frontRight.getSimWrapper(),
+        //         m_backLeft.getSimWrapper(),
+        //         m_backRight.getSimWrapper());
+        //     m_simulator = new SwerveSimWrapper(chassisConstants.m_wheelBase, chassisConstants.m_trackWidth, 64.0, 1.0, moduleSims, gyroSimulator);
+        // }
     }
 
     @Override
@@ -149,7 +151,7 @@ public class RevSwerveChassis implements AutoCloseable {
     }
 
     public void updateSimulator() {
-        m_simulator.update();
+        // m_simulator.update();
     }
 
     /**
@@ -169,9 +171,9 @@ public class RevSwerveChassis implements AutoCloseable {
         m_poseEstimator.addVisionMeasurement(pose, timestampSeconds, estimatedStdDev);
     }
 
-    public Pose2d getOdometryPosition() {
-        return m_odometry.getPoseMeters();
-    }
+    // public Pose2d getOdometryPosition() {
+    //     return m_odometry.getPoseMeters();
+    // }
 
     public void syncOdometryWithPoseEstimator() {
         m_odometry.resetPosition(m_gyroAngleSupplier.get(), getModulePositions(), m_poseEstimator.getEstimatedPosition());
@@ -202,11 +204,9 @@ public class RevSwerveChassis implements AutoCloseable {
         double ySpeedDelivered = ySpeed * m_maxSpeedMetersPerSecond;
         double rotDelivered = rot * m_maxAngularSpeed;
 
-        ChassisSpeeds desiredSpeed;
+        ChassisSpeeds desiredSpeed = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
         if (fieldRelative) {
-            desiredSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, getEstimatedPosition().getRotation());
-        } else {
-            desiredSpeed = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
+            desiredSpeed = desiredSpeed.toRobotRelative(getEstimatedPosition().getRotation());
         }
         setChassisSpeeds(desiredSpeed);
     }

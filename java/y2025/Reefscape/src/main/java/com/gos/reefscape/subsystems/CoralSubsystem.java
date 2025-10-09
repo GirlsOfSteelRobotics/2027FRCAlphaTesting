@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,14 +23,14 @@ public class CoralSubsystem extends SubsystemBase {
     private static final GosDoubleProperty CORAL_FETCH_SPEED = new GosDoubleProperty(Constants.DEFAULT_CONSTANT_PROPERTIES, "CoralFetchSpeed", -0.15);
 
     private final SparkFlex m_motor;
-    private final DigitalInput m_coralSensor;
+    private final AnalogInput m_coralSensor; // NOPMD(UnusedPrivateField)
     private final DigitalInput m_algaeSensor;
     private final LoggingUtil m_networkTableEntries;
     private final SparkMaxAlerts m_motorAlert;
 
     public CoralSubsystem() {
-        m_motor = new SparkFlex(Constants.CORAL_MOTOR_ID, MotorType.kBrushless);
-        m_coralSensor = new DigitalInput(Constants.CORAL_SENSOR_ID);
+        m_motor = new SparkFlex(Constants.SUPERSTRUCTURE_BUS_ID, Constants.CORAL_MOTOR_ID, MotorType.kBrushless);
+        m_coralSensor = new AnalogInput(Constants.CORAL_SENSOR_ID);
         m_algaeSensor = new DigitalInput(Constants.ALGAE_SENSOR_ID);
         m_networkTableEntries = new LoggingUtil("Coral Subsystem");
         m_motorAlert = new SparkMaxAlerts(m_motor, "Coral Motor");
@@ -73,7 +74,7 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     public boolean hasCoral() {
-        return !m_coralSensor.get();
+        return false; //!m_coralSensor.get();
     }
 
 

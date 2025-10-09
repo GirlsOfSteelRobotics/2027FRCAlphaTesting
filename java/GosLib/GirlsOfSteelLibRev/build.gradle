@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.3.2"
+    id "edu.wpi.first.GradleRIO2027" version "2027.0.0-alpha-2"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -26,8 +26,8 @@ test {
 }
 
 ext.groupId = "com.gos.lib.rev"
-apply from: "${rootDir}/build_scripts/gradle/publish_java.gradle"
+//apply from: "${rootDir}/build_scripts/gradle/publish_java.gradle"
 
-test {
-    finalizedBy jacocoTestReport
-}
+//test {
+//    finalizedBy jacocoTestReport
+//}

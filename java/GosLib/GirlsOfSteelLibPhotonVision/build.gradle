@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.3.2"
+    id "edu.wpi.first.GradleRIO2027" version "2027.0.0-alpha-2"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -9,13 +9,17 @@ targetCompatibility = JavaVersion.VERSION_17
 dependencies {
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
+    nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
+    nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
+
     implementation project(":GosLib:GirlsOfSteelLib")
+
+    implementation files("${rootDir}/libs/photonlib-java-dev-v2025.3.2-39-gcf7413a1.jar", "${rootDir}/libs/photontargeting-java-dev-v2025.3.2-39-gcf7413a1.jar")
 }
 
 test {
     useJUnitPlatform()
 }
-
 
 ext.groupId = "com.gos.lib.photonvision"
 apply from: "${rootDir}/build_scripts/gradle/publish_java.gradle"
