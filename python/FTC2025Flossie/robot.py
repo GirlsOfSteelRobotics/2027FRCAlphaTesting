@@ -13,6 +13,7 @@ from wpilib import RobotBase, SmartDashboard, Field2d
 from wpilib._wpilib import DriverStation
 from wpilib.simulation import DriverStationSim
 from wpimath import Pose2d
+from subsystems.Intake import Intake
 
 from subsystems.motor_id_subsystem import MotorIdSubsystem
 
@@ -25,11 +26,14 @@ class MyRobot(commands2.TimedCommandRobot):
     """
 
     def __init__(self) -> None:
+
         """This function is run when the robot is first started up and should be used for any
         initialization code.
         """
         super().__init__()
         self.autonomousCommand = None
+        self.IntakeSubsystem = Intake()
+        self.IntakeSubsystem.add_intake_debug_commands()
 
         """
         0/0 is shooter (and backwards)
@@ -51,9 +55,9 @@ class MyRobot(commands2.TimedCommandRobot):
         wpilib.DataLogManager.start()
 
         self.subsystems = []
-        for bus_id in range(2):
-            for motor_id in range(4):
-                self.subsystems.append(MotorIdSubsystem(bus_id, motor_id))
+        # for bus_id in range(2):
+        #     for motor_id in range(4):
+        #         self.subsystems.append(MotorIdSubsystem(bus_id, motor_id))
 
         if RobotBase.isSimulation():
             print("ITS SIM")
