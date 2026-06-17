@@ -2,6 +2,7 @@ import wpilib
 from commands2 import Subsystem, Command
 from wpilib import SmartDashboard
 
+
 class IntakeSubsystem(Subsystem):
     def __init__(self):
         self.intake_motor = wpilib.ExpansionHubMotor(0, 2)
@@ -22,7 +23,6 @@ class IntakeSubsystem(Subsystem):
         self.intake_motor.setThrottle(0)
         self.spinner_motor.setThrottle(0)
 
-
     def create_intake_command(self) -> Command:
         return self.runEnd(self.intake, self.stop).withName("intake")
 
@@ -30,8 +30,9 @@ class IntakeSubsystem(Subsystem):
         return self.runEnd(self.outtake, self.stop).withName("outtake")
 
     def create_reverse_intake_command(self) -> Command:
-        return self.runEnd(self.reverse_intake, self.stop).withName("reverse intake motor")
-
+        return self.runEnd(self.reverse_intake, self.stop).withName(
+            "reverse intake motor"
+        )
 
     def add_intake_debug_commands(self):
 

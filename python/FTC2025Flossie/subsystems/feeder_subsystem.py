@@ -19,4 +19,3 @@ class FeederSubsystem(Subsystem):
     def add_feeder_debug_commands(self):
 
         SmartDashboard.putData("feed", self.create_feed_command())
-

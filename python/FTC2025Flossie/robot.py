@@ -4,20 +4,18 @@
 # Open Source Software; you can modify and/or share it under the terms of
 # the WPILib BSD license file in the root directory of this project.
 #
+from typing import Optional
 
 import commands2
 import hal._wpiHal
 import wpilib
-from ntcore import NetworkTable, NetworkTableInstance
-from wpilib import RobotBase, SmartDashboard, Field2d
-from wpilib._wpilib import DriverStation
+from wpilib import RobotBase
 from wpilib.simulation import DriverStationSim
-from wpimath import Pose2d
 
 from commands.combined_commands import CombinedCommands
+from subsystems.feeder_subsystem import FeederSubsystem
 from subsystems.intake_subsystem import IntakeSubsystem
 from subsystems.shooter_subsystem import ShooterSubsystem
-from subsystems.feeder_subsystem import FeederSubsystem
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -28,23 +26,24 @@ class MyRobot(commands2.TimedCommandRobot):
     """
 
     def __init__(self) -> None:
-
         """This function is run when the robot is first started up and should be used for any
         initialization code.
         """
         super().__init__()
-        self.CombinedCommands = None
-        self.autonomousCommand = None
-        self.IntakeSubsystem = IntakeSubsystem()
-        self.ShooterSubsystem = ShooterSubsystem()
-        self.FeederSubsystem = FeederSubsystem()
-        self.CombinedCommands = CombinedCommands(self.IntakeSubsystem, self.ShooterSubsystem, self.FeederSubsystem)
+        self.autonomous_command: Optional[commands2.Command] = None
 
-        self.IntakeSubsystem.add_intake_debug_commands()
-        self.ShooterSubsystem.add_shooter_debug_commands()
-        self.FeederSubsystem.add_feeder_debug_commands()
+        self.intake_subsystem = IntakeSubsystem()
+        self.shooter_subsystem = ShooterSubsystem()
+        self.feeder_subsystem = FeederSubsystem()
+        self.combined_commands = CombinedCommands(
+            self.intake_subsystem, self.shooter_subsystem, self.feeder_subsystem
+        )
 
-        self.CombinedCommands.add_combined_commands_debug_commands()
+        self.intake_subsystem.add_intake_debug_commands()
+        self.shooter_subsystem.add_shooter_debug_commands()
+        self.feeder_subsystem.add_feeder_debug_commands()
+
+        self.combined_commands.add_combined_commands_debug_commands()
 
         """
         0/0 is shooter (and backwards)
@@ -71,10 +70,6 @@ class MyRobot(commands2.TimedCommandRobot):
             DriverStationSim.setEnabled(True)
             DriverStationSim.notifyNewData()
 
-        self.temp_pub = NetworkTableInstance.getDefault().getTable("TEMP").getStructTopic("Hello", Pose2d).publish()
-        self.temp_pub.set(Pose2d(0, 0, 0))
-
-
     def robotPeriodic(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
         commands2.CommandScheduler.getInstance().run()
@@ -87,10 +82,10 @@ class MyRobot(commands2.TimedCommandRobot):
         pass
 
     def autonomousInit(self) -> None:
-        self.autonomousCommand = self.get_autonomous_command()
+        self.autonomous_command = self.get_autonomous_command()
 
-        if self.autonomousCommand is not None:
-            self.autonomousCommand.schedule()
+        if self.autonomous_command is not None:
+            self.autonomous_command.schedule()
 
     def autonomousPeriodic(self) -> None:
         """This function is called periodically during autonomous."""
@@ -101,8 +96,8 @@ class MyRobot(commands2.TimedCommandRobot):
         # teleop starts running. If you want the autonomous to
         # continue until interrupted by another command, remove
         # this line or comment it out.
-        if self.autonomousCommand is not None:
-            self.autonomousCommand.cancel()
+        if self.autonomous_command is not None:
+            self.autonomous_command.cancel()
 
     def teleopPeriodic(self) -> None:
         """This function is called periodically during operator control."""
@@ -116,5 +111,5 @@ class MyRobot(commands2.TimedCommandRobot):
         """This function is called periodically during utility mode."""
         pass
 
-    def get_autonomous_command(self):
+    def get_autonomous_command(self) -> Optional[commands2.Command]:
         return None
