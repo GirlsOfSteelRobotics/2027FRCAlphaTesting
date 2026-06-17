@@ -13,7 +13,13 @@ from wpilib import RobotBase, SmartDashboard, Field2d
 from wpilib._wpilib import DriverStation
 from wpilib.simulation import DriverStationSim
 from wpimath import Pose2d
+
+from Commands.CombinedCommands import CombinedCommands
 from subsystems.Intake import Intake
+from subsystems.Shooter import Shooter
+from subsystems.Feeder import Feeder
+
+
 
 from subsystems.motor_id_subsystem import MotorIdSubsystem
 
@@ -31,9 +37,18 @@ class MyRobot(commands2.TimedCommandRobot):
         initialization code.
         """
         super().__init__()
+        self.CombinedCommands = None
         self.autonomousCommand = None
         self.IntakeSubsystem = Intake()
+        self.ShooterSubsystem = Shooter()
+        self.FeederSubsystem = Feeder()
+        self.CombinedCommands = CombinedCommands(self.IntakeSubsystem, self.ShooterSubsystem, self.FeederSubsystem)
+
         self.IntakeSubsystem.add_intake_debug_commands()
+        self.ShooterSubsystem.add_shooter_debug_commands()
+        self.FeederSubsystem.add_feeder_debug_commands()
+
+        self.CombinedCommands.add_combined_commands_debug_commands()
 
         """
         0/0 is shooter (and backwards)
