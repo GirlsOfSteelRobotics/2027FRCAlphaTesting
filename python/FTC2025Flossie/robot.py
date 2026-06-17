@@ -14,14 +14,10 @@ from wpilib._wpilib import DriverStation
 from wpilib.simulation import DriverStationSim
 from wpimath import Pose2d
 
-from Commands.CombinedCommands import CombinedCommands
-from subsystems.Intake import Intake
-from subsystems.Shooter import Shooter
-from subsystems.Feeder import Feeder
-
-
-
-from subsystems.motor_id_subsystem import MotorIdSubsystem
+from commands.combined_commands import CombinedCommands
+from subsystems.intake_subsystem import IntakeSubsystem
+from subsystems.shooter_subsystem import ShooterSubsystem
+from subsystems.feeder_subsystem import FeederSubsystem
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -39,9 +35,9 @@ class MyRobot(commands2.TimedCommandRobot):
         super().__init__()
         self.CombinedCommands = None
         self.autonomousCommand = None
-        self.IntakeSubsystem = Intake()
-        self.ShooterSubsystem = Shooter()
-        self.FeederSubsystem = Feeder()
+        self.IntakeSubsystem = IntakeSubsystem()
+        self.ShooterSubsystem = ShooterSubsystem()
+        self.FeederSubsystem = FeederSubsystem()
         self.CombinedCommands = CombinedCommands(self.IntakeSubsystem, self.ShooterSubsystem, self.FeederSubsystem)
 
         self.IntakeSubsystem.add_intake_debug_commands()
@@ -69,13 +65,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # Initialize data logging.
         wpilib.DataLogManager.start()
 
-        self.subsystems = []
-        # for bus_id in range(2):
-        #     for motor_id in range(4):
-        #         self.subsystems.append(MotorIdSubsystem(bus_id, motor_id))
-
         if RobotBase.isSimulation():
-            print("ITS SIM")
             DriverStationSim.setAllianceStationId(hal._wpiHal.AllianceStationID.BLUE_1)
             DriverStationSim.setRobotMode(hal._wpiHal._RobotMode.TELEOPERATED)
             DriverStationSim.setEnabled(True)

@@ -3,7 +3,7 @@ from commands2 import Subsystem, Command
 from wpilib import SmartDashboard
 
 
-class Feeder(Subsystem):
+class FeederSubsystem(Subsystem):
     def __init__(self):
         self.feeder_motor = wpilib._wpilib.ExpansionHubCRServo(1, 1)
 

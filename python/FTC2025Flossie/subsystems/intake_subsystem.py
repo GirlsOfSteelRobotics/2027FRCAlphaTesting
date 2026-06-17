@@ -2,7 +2,7 @@ import wpilib
 from commands2 import Subsystem, Command
 from wpilib import SmartDashboard
 
-class Intake(Subsystem):
+class IntakeSubsystem(Subsystem):
     def __init__(self):
         self.intake_motor = wpilib.ExpansionHubMotor(0, 2)
         self.spinner_motor = wpilib.ExpansionHubMotor(0, 1)

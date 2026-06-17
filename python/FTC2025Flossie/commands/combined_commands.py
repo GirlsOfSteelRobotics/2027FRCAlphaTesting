@@ -1,12 +1,12 @@
 from wpilib import SmartDashboard
 
-from subsystems.Feeder import Feeder
-from subsystems.Intake import Intake
-from subsystems.Shooter import Shooter
+from subsystems.feeder_subsystem import FeederSubsystem
+from subsystems.intake_subsystem import IntakeSubsystem
+from subsystems.shooter_subsystem import ShooterSubsystem
 
 
-class CombinedCommands():
-    def __init__(self, intake: Intake, shooter: Shooter, feeder: Feeder):
+class CombinedCommands:
+    def __init__(self, intake: IntakeSubsystem, shooter: ShooterSubsystem, feeder: FeederSubsystem):
         self.intake = intake
         self.shooter = shooter
         self.feeder = feeder

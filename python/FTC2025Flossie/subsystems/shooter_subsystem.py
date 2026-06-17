@@ -3,7 +3,7 @@ from commands2 import Subsystem, Command
 from wpilib import SmartDashboard
 
 
-class Shooter(Subsystem):
+class ShooterSubsystem(Subsystem):
     def __init__(self):
         self.shooter_motor = wpilib.ExpansionHubServo(1, 0)
         self.shooter_motor.setReversed(True)
