@@ -13,9 +13,15 @@ class FeederSubsystem(Subsystem):
     def stop(self):
         self.feeder_motor.setThrottle(0)
 
+    def reverse(self):
+        self.feeder_motor.setThrottle(-1)
+
     def create_feed_command(self) -> Command:
         return self.runEnd(self.feed, self.stop).withName("feed")
 
-    def add_feeder_debug_commands(self):
+    def create_reverse_feeder_command(self) -> Command:
+        return self.runEnd(self.reverse, self.stop).withName("reverse feeder")
 
-        SmartDashboard.putData("feed", self.create_feed_command())
+    def add_feeder_debug_commands(self):
+        SmartDashboard.putData(self.create_feed_command())
+        SmartDashboard.putData(self.create_reverse_feeder_command())

@@ -16,6 +16,7 @@ from commands.combined_commands import CombinedCommands
 from subsystems.feeder_subsystem import FeederSubsystem
 from subsystems.intake_subsystem import IntakeSubsystem
 from subsystems.shooter_subsystem import ShooterSubsystem
+from subsystems.hood_subsystem import HoodSubsystem
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -35,6 +36,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.intake_subsystem = IntakeSubsystem()
         self.shooter_subsystem = ShooterSubsystem()
         self.feeder_subsystem = FeederSubsystem()
+        self.hood_subsystem = HoodSubsystem()
         self.combined_commands = CombinedCommands(
             self.intake_subsystem, self.shooter_subsystem, self.feeder_subsystem
         )
@@ -42,6 +44,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.intake_subsystem.add_intake_debug_commands()
         self.shooter_subsystem.add_shooter_debug_commands()
         self.feeder_subsystem.add_feeder_debug_commands()
+        self.hood_subsystem.add_hood_debug_commands()
 
         self.combined_commands.add_combined_commands_debug_commands()
 
@@ -57,7 +60,7 @@ class MyRobot(commands2.TimedCommandRobot):
         1/3 is fl
         
         servos:
-        0: hood
+        1/0: hood
         1: feeder (treat like motor)
         """
 
