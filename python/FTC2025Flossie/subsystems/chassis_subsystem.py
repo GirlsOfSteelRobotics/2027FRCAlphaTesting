@@ -18,3 +18,6 @@ class ChassisSubsystem(Subsystem):
     def drive(self, x: float, y: float, rot: float):
 
         self.mech_drive.driveCartesian(x, y, rot)
+
+    def create_drive_command(self) -> Command:
+        return self.runEnd(self.drive)
