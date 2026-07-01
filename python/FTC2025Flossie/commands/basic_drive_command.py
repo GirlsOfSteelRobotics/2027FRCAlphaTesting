@@ -14,7 +14,7 @@ class BasicDriveCommand(Command):
     ):
         self.chassis = chassis
         self.joystick = joystick
-        self.addRequirements()
+        self.addRequirements(self.chassis)
 
     def execute(self):
         self.chassis.drive(

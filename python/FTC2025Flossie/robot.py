@@ -84,8 +84,13 @@ class MyRobot(commands2.TimedCommandRobot):
             DriverStationSim.setEnabled(True)
             DriverStationSim.notifyNewData()
 
+        self.configureBindings()
+
     def configureBindings(self) -> None:
         self.chassis_subsystem.setDefaultCommand(BasicDriveCommand(self.chassis_subsystem, self.driver_controller))
+        self.driver_controller.start().and_(self.driver_controller.a()).whileTrue(self.chassis_subsystem.create_reset_imu_command())
+
+        self.driver_controller.rightTrigger().whileTrue(self.shooter_subsystem.create_pid_shoot_command())
 
     def robotPeriodic(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""

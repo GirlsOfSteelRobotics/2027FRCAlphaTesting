@@ -20,7 +20,7 @@ class CombinedCommands:
         return (
             self.intake.create_intake_command()
             .alongWith(self.feeder.create_feed_command())
-            .alongWith(self.shooter.create_shoot_ball_command())
+            .alongWith(self.shooter.create_simple_shoot_command())
         )
 
     def add_combined_commands_debug_commands(self):
