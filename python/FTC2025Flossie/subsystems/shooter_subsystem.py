@@ -28,6 +28,11 @@ class ShooterSubsystem(Subsystem):
     def get_goal(self):
         return wpilib.Preferences.getFloat("shooter goal vel")
 
+    def at_goal_speed(self):
+        if abs(self.get_goal() - self.shooter_motor.getEncoderVelocity()) < 10:
+            return True
+        return False
+
     def stop(self):
         self.shooter_motor.setThrottle(0)
 
@@ -45,4 +50,5 @@ class ShooterSubsystem(Subsystem):
         SmartDashboard.putData(self.create_pid_shoot_command())
 
     def periodic(self) -> None:
-        SmartDashboard.putNumber("shooter vel", self.shooter_motor.getEncoderVelocity())
+        SmartDashboard.putNumber("shooter/velocity", self.shooter_motor.getEncoderVelocity())
+        SmartDashboard.putBoolean("shooter/at goal speed", self.at_goal_speed())

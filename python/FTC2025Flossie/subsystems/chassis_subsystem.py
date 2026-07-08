@@ -26,8 +26,29 @@ class ChassisSubsystem(Subsystem):
         SmartDashboard.putNumber("drive y", y)
         SmartDashboard.putNumber("drive rot", rot)
 
+    def stop(self):
+        self.drive(0, 0, 0)
+
     def create_reset_imu_command(self) -> Command:
         return self.runOnce(self.reset_imu)
 
+    def create_drive_fl_command(self) -> Command:
+        return self.runEnd(lambda:self.front_left.setThrottle(1), self.stop).withName("front left forward")
+
+    def create_drive_fr_command(self) -> Command:
+        return self.runEnd(lambda:self.front_right.setThrottle(1), self.stop).withName("front right forward")
+
+    def create_drive_bl_command(self) -> Command:
+        return self.runEnd(lambda:self.back_left.setThrottle(1), self.stop).withName("back left forward")
+
+    def create_drive_br_command(self) -> Command:
+        return self.runEnd(lambda:self.back_right.setThrottle(1), self.stop).withName("back right forward")
+
     def periodic(self) -> None:
         SmartDashboard.putNumber("imu yaw", -self.imu.getYaw())
+
+    def add_chassis_debug_commands(self):
+        SmartDashboard.putData("chassis/front left forward", self.create_drive_fl_command())
+        SmartDashboard.putData("chassis/front right forward", self.create_drive_fr_command())
+        SmartDashboard.putData("chassis/back left forward", self.create_drive_bl_command())
+        SmartDashboard.putData("chassis/back right forward", self.create_drive_br_command())

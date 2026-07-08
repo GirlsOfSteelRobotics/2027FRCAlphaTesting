@@ -9,7 +9,7 @@ from typing import Optional
 import commands2
 import hal._wpiHal
 import wpilib
-from commands2.button import CommandNiDsXboxController
+from commands2.button import CommandNiDsXboxController, CommandGenericHID
 from wpilib import RobotBase
 from wpilib.simulation import DriverStationSim
 
@@ -46,16 +46,18 @@ class MyRobot(commands2.TimedCommandRobot):
         self.chassis_subsystem = ChassisSubsystem()
 
         self.combined_commands = CombinedCommands(
-            self.intake_subsystem, self.shooter_subsystem, self.feeder_subsystem
+            self.intake_subsystem, self.shooter_subsystem, self.feeder_subsystem, self.hood_subsystem
         )
 
         self.driver_controller = CommandNiDsXboxController(0)
+        CommandGenericHID
         self.operator_controller = CommandNiDsXboxController(1)
 
         self.intake_subsystem.add_intake_debug_commands()
         self.shooter_subsystem.add_shooter_debug_commands()
         self.feeder_subsystem.add_feeder_debug_commands()
         self.hood_subsystem.add_hood_debug_commands()
+        self.chassis_subsystem.add_chassis_debug_commands()
 
         self.combined_commands.add_combined_commands_debug_commands()
 
@@ -91,6 +93,8 @@ class MyRobot(commands2.TimedCommandRobot):
         self.driver_controller.start().and_(self.driver_controller.a()).whileTrue(self.chassis_subsystem.create_reset_imu_command())
 
         self.driver_controller.rightTrigger().whileTrue(self.shooter_subsystem.create_pid_shoot_command())
+        self.driver_controller.leftTrigger().whileTrue(self.intake_subsystem.create_intake_command())
+
 
     def robotPeriodic(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""

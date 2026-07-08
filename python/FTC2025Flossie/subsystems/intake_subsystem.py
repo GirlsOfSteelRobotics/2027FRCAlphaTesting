@@ -19,6 +19,9 @@ class IntakeSubsystem(Subsystem):
     def reverse_intake(self):
         self.intake_motor.setThrottle(-1)
 
+    def spindexer_forward(self):
+        self.spinner_motor.setThrottle(1)
+
     def stop(self):
         self.intake_motor.setThrottle(0)
         self.spinner_motor.setThrottle(0)
@@ -33,6 +36,9 @@ class IntakeSubsystem(Subsystem):
         return self.runEnd(self.reverse_intake, self.stop).withName(
             "reverse intake motor"
         )
+
+    def create_spindexer_forward(self) -> Command:
+        return self.runEnd(self.spindexer_forward, self.stop).withName("spindexer forward")
 
     def add_intake_debug_commands(self):
 
