@@ -22,6 +22,7 @@ from subsystems.feeder_subsystem import FeederSubsystem
 from subsystems.intake_subsystem import IntakeSubsystem
 from subsystems.shooter_subsystem import ShooterSubsystem
 from subsystems.hood_subsystem import HoodSubsystem
+from limelight_helpers import Limelight
 
 
 
@@ -61,21 +62,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.combined_commands.add_combined_commands_debug_commands()
 
-        """
-        0/0 is shooter (and backwards)
-        0/1 is spindexer
-        0/2 is intake
-        0/3 is nothing
-        
-        1/0 is fr and backwards
-        1/1 is br and backwards
-        1/2 is bl
-        1/3 is fl
-        
-        servos:
-        1/0: hood
-        1: feeder (treat like motor)
-        """
+        self.limelight = Limelight("limelight")
 
         # Initialize data logging.
         wpilib.DataLogManager.start()
@@ -99,6 +86,8 @@ class MyRobot(commands2.TimedCommandRobot):
     def robotPeriodic(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
         commands2.CommandScheduler.getInstance().run()
+
+        self.limelight.get_bot_pose()
 
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
